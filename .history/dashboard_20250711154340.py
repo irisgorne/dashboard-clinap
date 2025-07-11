@@ -166,6 +166,9 @@ st.markdown("### 💾 Exportações Finais")
 
 # Exportar Painel Completo com gráficos e tabela em PDF (versão compatível com Streamlit Cloud)
 with st.expander("📄 Baixar painel completo (gráficos + tabela) em PDF", expanded=False):
+
+    # Exportar painel completo (gráficos + tabela) sem usar write_image (compatível com Streamlit Cloud)
+with st.expander("📄 Baixar painel completo em PDF (gráficos + tabela)", expanded=False):
     from plotly.io import to_image
 
     def gerar_html_com_base64():
