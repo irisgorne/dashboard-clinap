@@ -163,6 +163,9 @@ st.dataframe(df_filtrado, use_container_width=True)
 
 # Exportações
 
+# Exportar CSV
+from plotly.io import to_image
+
 # Exportações
 st.markdown("### 💾 Exportações Finais")
 
