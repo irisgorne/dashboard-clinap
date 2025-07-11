@@ -164,53 +164,8 @@ st.dataframe(df_filtrado, use_container_width=True)
 # Exportações
 st.markdown("### 💾 Exportações Finais")
 
-# Exportar Painel Completo (gráficos + tabela)
-with st.expander("📄 Baixar painel completo em PDF (gráficos + tabela)", expanded=False):
-    from plotly.io import to_html
 
-    def gerar_html_painel(fig1, fig2, fig3, tabela_html):
-        return f"""
-        <html>
-        <head>
-        <style>
-            body {{ font-family: Arial, sans-serif; padding: 20px; }}
-            h2 {{ text-align: center; }}
-            iframe {{ width: 100%; height: 500px; border: none; margin-bottom: 30px; }}
-            table {{ font-size: 12px; width: 100%; border-collapse: collapse; margin-top: 30px; }}
-            th, td {{ border: 1px solid #000; padding: 4px; text-align: center; }}
-            th {{ background-color: #f2f2f2; }}
-        </style>
-        </head>
-        <body>
-            <h2>Painel Completo - CLiNAP</h2>
 
-            <h3>Gráfico 1: {eixo_x} vs {eixo_y}</h3>
-            {to_html(fig1, include_plotlyjs='cdn')}
-
-            <h3>Gráfico 2: Comparativo {eixo_x} vs {eixo_y}</h3>
-            {to_html(fig2, include_plotlyjs=False)}
-
-            <h3>Gráfico 3: Pacientes por Cluster</h3>
-            {to_html(fig3, include_plotlyjs=False)}
-
-            <h3>Tabela com dados filtrados</h3>
-            {tabela_html}
-        </body>
-        </html>
-        """
-
-    def gerar_pdf_html_completo():
-        tabela_html = df_filtrado.to_html(index=False)
-        html_painel = gerar_html_painel(fig_disp, fig_comp, fig_hist, tabela_html)
-        pdf_buffer = io.BytesIO()
-        pisa.CreatePDF(io.StringIO(html_painel), dest=pdf_buffer)
-        return pdf_buffer.getvalue()
-
-    if st.button("📥 Baixar PDF do Painel Completo"):
-        pdf_final = gerar_pdf_html_completo()
-        b64_pdf = base64.b64encode(pdf_final).decode()
-        href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="painel_completo.pdf">📄 Clique para baixar</a>'
-        st.markdown(href, unsafe_allow_html=True)
 
 # Exportar CSV
 csv = df_filtrado.to_csv(index=False).encode("utf-8")

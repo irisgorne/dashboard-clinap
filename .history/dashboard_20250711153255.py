@@ -212,6 +212,7 @@ with st.expander("📄 Baixar painel completo em PDF (gráficos + tabela)", expa
         href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="painel_completo.pdf">📄 Clique para baixar</a>'
         st.markdown(href, unsafe_allow_html=True)
 
+
 # Exportar CSV
 csv = df_filtrado.to_csv(index=False).encode("utf-8")
 st.download_button("📥 Baixar CSV", data=csv, file_name="dados_filtrados.csv", mime="text/csv")
