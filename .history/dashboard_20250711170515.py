@@ -160,6 +160,7 @@ with st.expander("📚 Legenda explicativa"):
 st.markdown("### 🧾 Tabela com dados filtrados")
 st.dataframe(df_filtrado, use_container_width=True)
 
+
 # Exportações
 st.markdown("### 💾 Exportações Finais")
 
