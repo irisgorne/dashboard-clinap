@@ -5,5 +5,3 @@ scikit-learn
 numpy
 statsmodels
 xhtml2pdf
-kaleido
-

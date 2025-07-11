@@ -283,6 +283,7 @@ def gerar_html_com_graficos():
     </html>
     """
 
+
 # Converte HTML em PDF
 def converter_html_para_pdf(html_content):
     result = io.BytesIO()

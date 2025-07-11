@@ -183,113 +183,58 @@ with st.expander("📄 Exportar relatório em PDF"):
 
 # ---- Painel Estático (imagens + PDF) ----
 import os
-import plotly.express as px
 import plotly.io as pio
-import streamlit as st
-import base64
-import io
-from xhtml2pdf import pisa
-
-# Define tema colorido
-pio.templates.default = "plotly"
 
 st.markdown("### 🖼️ Gerar Painel Estático em PDF")
 
-# Pasta para salvar imagens
+# Pasta para salvar as imagens temporariamente
 os.makedirs("painel_pdf", exist_ok=True)
 
-# Caminhos das imagens
+# Gerar imagens dos gráficos principais
 fig1_path = "painel_pdf/dispersao_imc_hba1c.png"
 fig2_path = "painel_pdf/comparativo_escores.png"
 fig3_path = "painel_pdf/histograma_cluster.png"
 
 # 1. Dispersão
-fig_disp = px.scatter(
-    df_filtrado,
-    x="IMC",
-    y="HbA1c",
-    color=cluster_coluna,
-    hover_data=["ID", "Sexo", "Idade", "Calorias"],
-    title="Dispersão: IMC vs HbA1c",
-    template="plotly"
-)
+fig_disp = px.scatter(df_filtrado, x="IMC", y="HbA1c", color=cluster_coluna,
+                      hover_data=["ID", "Sexo", "Idade", "Calorias"],
+                      title="Dispersão: IMC vs HbA1c")
 pio.write_image(fig_disp, fig1_path, width=800, height=500)
 
 # 2. Comparativo CLiNAP vs CLiNAP-G
-fig_comp = px.scatter(
-    df_filtrado,
-    x="Escore_risco",
-    y="Escore_CLiNAP_G",
-    color=cluster_coluna,
-    trendline="ols",
-    title="Comparativo: CLiNAP vs CLiNAP-G",
-    template="plotly"
-)
+fig_comp = px.scatter(df_filtrado, x="Escore_risco", y="Escore_CLiNAP_G", color=cluster_coluna,
+                      trendline="ols", title="Comparativo: CLiNAP vs CLiNAP-G")
 pio.write_image(fig_comp, fig2_path, width=800, height=500)
 
 # 3. Histograma
-fig_hist = px.histogram(
-    df_filtrado,
-    x=cluster_coluna,
-    color=cluster_coluna,
-    title="Distribuição de Pacientes por Cluster",
-    text_auto=True,
-    template="plotly"
-)
+fig_hist = px.histogram(df_filtrado, x=cluster_coluna, color=cluster_coluna,
+                        title="Distribuição de Pacientes por Cluster", text_auto=True)
 pio.write_image(fig_hist, fig3_path, width=800, height=500)
 
-# Gera HTML com os gráficos
+# Criar HTML com os gráficos
 def gerar_html_com_graficos():
-    tabela_html = df_filtrado.to_html(index=False, classes='tabela', border=1)
-
     return f"""
     <html>
-    <head>
-        <meta charset='utf-8'>
-        <style>
-            body {{ font-family: Arial, sans-serif; padding: 20px; }}
-            h2, h3 {{ text-align: center; }}
-            .tabela {{
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 30px;
-                font-size: 12px;
-            }}
-            .tabela th, .tabela td {{
-                border: 1px solid #000;
-                padding: 4px;
-                text-align: center;
-            }}
-            .tabela th {{
-                background-color: #f2f2f2;
-            }}
-        </style>
-    </head>
+    <head><meta charset='utf-8'></head>
     <body>
-        <h2>Painel Estático - CLiNAP</h2>
-
+        <h2 style="text-align:center;">Painel Estático - CLiNAP</h2>
         <h3>Dispersão: IMC vs HbA1c</h3>
         <img src="{fig1_path}" width="700">
-
         <h3>Comparativo: Escore CLiNAP vs CLiNAP-G</h3>
         <img src="{fig2_path}" width="700">
-
         <h3>Distribuição de Pacientes por Cluster</h3>
         <img src="{fig3_path}" width="700">
-
-        <h3>Tabela de Dados Filtrados</h3>
-        {tabela_html}
     </body>
     </html>
     """
 
-# Converte HTML em PDF
+# Gera PDF a partir do HTML
 def converter_html_para_pdf(html_content):
     result = io.BytesIO()
     pisa.CreatePDF(io.StringIO(html_content), dest=result, link_callback=lambda uri, rel: uri)
     return result.getvalue()
 
-# Botão de download do PDF
+# Botão para gerar PDF
 if st.button("📄 Baixar Painel Estático em PDF"):
     html = gerar_html_com_graficos()
     pdf_bytes = converter_html_para_pdf(html)

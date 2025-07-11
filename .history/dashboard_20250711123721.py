@@ -240,45 +240,17 @@ pio.write_image(fig_hist, fig3_path, width=800, height=500)
 
 # Gera HTML com os gráficos
 def gerar_html_com_graficos():
-    tabela_html = df_filtrado.to_html(index=False, classes='tabela', border=1)
-
     return f"""
     <html>
-    <head>
-        <meta charset='utf-8'>
-        <style>
-            body {{ font-family: Arial, sans-serif; padding: 20px; }}
-            h2, h3 {{ text-align: center; }}
-            .tabela {{
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 30px;
-                font-size: 12px;
-            }}
-            .tabela th, .tabela td {{
-                border: 1px solid #000;
-                padding: 4px;
-                text-align: center;
-            }}
-            .tabela th {{
-                background-color: #f2f2f2;
-            }}
-        </style>
-    </head>
+    <head><meta charset='utf-8'></head>
     <body>
-        <h2>Painel Estático - CLiNAP</h2>
-
+        <h2 style="text-align:center;">Painel Estático - CLiNAP</h2>
         <h3>Dispersão: IMC vs HbA1c</h3>
         <img src="{fig1_path}" width="700">
-
         <h3>Comparativo: Escore CLiNAP vs CLiNAP-G</h3>
         <img src="{fig2_path}" width="700">
-
         <h3>Distribuição de Pacientes por Cluster</h3>
         <img src="{fig3_path}" width="700">
-
-        <h3>Tabela de Dados Filtrados</h3>
-        {tabela_html}
     </body>
     </html>
     """

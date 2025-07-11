@@ -3,7 +3,4 @@ pandas
 plotly
 scikit-learn
 numpy
-statsmodels
-xhtml2pdf
-kaleido
-
+pip install -r requirements.txt
