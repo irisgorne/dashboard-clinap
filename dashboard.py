@@ -213,7 +213,6 @@ fig_disp = px.scatter(
     title="Dispersão: IMC vs HbA1c",
     template="plotly"
 )
-pio.write_image(fig_disp, fig1_path, width=800, height=500)
 
 # 2. Comparativo CLiNAP vs CLiNAP-G
 fig_comp = px.scatter(
@@ -225,7 +224,7 @@ fig_comp = px.scatter(
     title="Comparativo: CLiNAP vs CLiNAP-G",
     template="plotly"
 )
-pio.write_image(fig_comp, fig2_path, width=800, height=500)
+
 
 # 3. Histograma
 fig_hist = px.histogram(
@@ -236,7 +235,7 @@ fig_hist = px.histogram(
     text_auto=True,
     template="plotly"
 )
-pio.write_image(fig_hist, fig3_path, width=800, height=500)
+
 
 # Gera HTML com os gráficos
 def gerar_html_com_graficos():
