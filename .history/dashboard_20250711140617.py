@@ -172,16 +172,4 @@ with st.expander("📄 Exportar relatório em PDF"):
         st.markdown(f'<a href="data:application/pdf;base64,{b64}" download="paciente_{paciente["ID"]}.pdf">📄 Baixar PDF Individual</a>', unsafe_allow_html=True)
 
     elif escolha == "Panorama geral":
-        html = f"""
-        <html><body>
-        <h2>Panorama Geral</h2>
-        <p>Filtros: {f1}={v1} | {f2}={v2}</p>
-        <p>Total: {len(df_filtrado)} pacientes</p>
-        <p>Cluster: {cluster_coluna}</p>
-        <p>Média IMC: {df_filtrado['IMC'].mean():.2f}</p>
-        <p>Média HbA1c: {df_filtrado['HbA1c'].mean():.2f}</p>
-        </body></html>
-        """
-        pdf = gerar_pdf(html)
-        b64 = base64.b64encode(pdf).decode()
-        st.markdown(f'<a href="data:application/pdf;base64,{b64}" download="relatorio_geral.pdf">🖼️ Baixar PDF Geral</a>', unsafe_allow_html=True)
+        htm
