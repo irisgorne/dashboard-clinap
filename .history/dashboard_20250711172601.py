@@ -18,6 +18,8 @@ st.markdown("<h2 style='text-align: center;'>📊 Painel Interativo - Clustering
 df = pd.read_csv("data/base_resultado.csv")
 
 
+
+
 # Aplica CLiNAP-G
 variaveis_g = ["IMC", "HbA1c", "Calorias"]
 df_validos = df.dropna(subset=variaveis_g)

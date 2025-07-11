@@ -29,8 +29,6 @@ df.loc[df_validos.index, "Cluster_CLiNAP_G"] = labels_g
 df.loc[df_validos.index, "Escore_CLiNAP_G"] = escore_g_normalizado
 
 
-
-
 # Filtros
 st.sidebar.header("🔍 Filtros")
 colunas_filtro = ["Sexo", "Idade", "Região", "Cluster_CLiNAP", "Cluster_CLiNAP_G"]
@@ -44,14 +42,10 @@ if v1 != "Todos": df_filtrado = df_filtrado[df_filtrado[f1] == v1]
 if v2 != "Todos": df_filtrado = df_filtrado[df_filtrado[f2] == v2]
 
 
-
-
 # Cluster usado
 st.sidebar.markdown("---")
 cluster_coluna = st.sidebar.radio("🧠 Agrupamento:", ["Cluster_CLiNAP", "Cluster_CLiNAP_G"])
 df_filtrado[cluster_coluna] = df_filtrado[cluster_coluna].astype(str)
-
-
 
 
 # Filtros de eixo X e Y
@@ -60,8 +54,6 @@ st.sidebar.subheader("📊 Eixos dos Gráficos")
 opcoes_numericas = df_filtrado.select_dtypes(include=["float", "int"]).columns.tolist()
 eixo_x = st.sidebar.selectbox("Eixo X", opcoes_numericas, index=opcoes_numericas.index("IMC") if "IMC" in opcoes_numericas else 0)
 eixo_y = st.sidebar.selectbox("Eixo Y", opcoes_numericas, index=opcoes_numericas.index("HbA1c") if "HbA1c" in opcoes_numericas else 1)
-
-
 
 
 # Escore de risco
@@ -73,8 +65,6 @@ if all(col in df_filtrado.columns for col in ["IMC", "HbA1c"]):
     df_filtrado["Escore_risco"] = df_filtrado["Escore_risco"].round(1)
 
 
-
-
     def escore_nivel(score):
         if score >= 80:
             return "🔴 Alto"
@@ -82,8 +72,6 @@ if all(col in df_filtrado.columns for col in ["IMC", "HbA1c"]):
             return "🟠 Moderado"
         else:
             return "🟢 Baixo"
-
-
 
 
     def classificar_risco(score):
@@ -95,12 +83,8 @@ if all(col in df_filtrado.columns for col in ["IMC", "HbA1c"]):
             return "Baixo risco"
 
 
-
-
     df_filtrado["Escore_nivel"] = df_filtrado["Escore_risco"].apply(escore_nivel)
     df_filtrado["Classificacao"] = df_filtrado["Escore_risco"].apply(classificar_risco)
-
-
 
 
     # Filtro por escore
@@ -110,15 +94,11 @@ if all(col in df_filtrado.columns for col in ["IMC", "HbA1c"]):
     df_filtrado = df_filtrado[df_filtrado["Escore_risco"] >= escore_min].sort_values("Escore_risco", ascending=False)
 
 
-
-
 # Gráfico 1 – Dispersão
 st.markdown(f"### 🔁 Dispersão: {eixo_x} vs {eixo_y}")
 fig_disp = px.scatter(df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
                       hover_data=["ID", "Sexo", "Idade", "Calorias", "Escore_risco", "Escore_CLiNAP_G"])
 st.plotly_chart(fig_disp, use_container_width=True)
-
-
 
 
 # Lista de pacientes
@@ -135,8 +115,6 @@ with st.expander("🧬 Lista de pacientes filtrados por escore", expanded=False)
         """)
 
 
-
-
 # Relatório individual
 paciente = None
 if "ID" in df_filtrado.columns:
@@ -151,15 +129,11 @@ if "ID" in df_filtrado.columns:
         st.markdown(f"- **IMC:** {paciente['IMC']}  \n- **HbA1c:** {paciente['HbA1c']}  \n- **Calorias:** {paciente['Calorias']}")
 
 
-
-
 # Gráfico 2 – Comparativo
 st.markdown(f"### 📉 Comparativo: {eixo_x} vs {eixo_y}")
 fig_comp = px.scatter(df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
                       trendline="ols", template="plotly")
 st.plotly_chart(fig_comp, use_container_width=True)
-
-
 
 
 # Gráfico 3 – Histograma
@@ -168,14 +142,10 @@ fig_hist = px.histogram(df_filtrado, x=cluster_coluna, color=cluster_coluna, tex
 st.plotly_chart(fig_hist, use_container_width=True)
 
 
-
-
 # Pesos
 with st.expander("📊 Pesos CLiNAP-G"):
     for var, peso in zip(variaveis_g, pesos_g):
         st.markdown(f"- **{var}**: `{peso:.4f}`")
-
-
 
 
 # Legenda
@@ -186,37 +156,25 @@ with st.expander("📚 Legenda explicativa"):
     """)
 
 
-
-
 # Tabela final
 st.markdown("### 🧾 Tabela com dados filtrados")
 st.dataframe(df_filtrado, use_container_width=True)
 
-
-
-
-# Exportações
-
-
 # Exportações
 st.markdown("### 💾 Exportações Finais")
-
 
 # Exportar CSV
 csv = df_filtrado.to_csv(index=False).encode("utf-8")
 st.download_button("📥 Baixar CSV", data=csv, file_name="dados_filtrados.csv", mime="text/csv")
 
-
 # Exportar PDF: Relatório individual e geral
 with st.expander("📄 Exportar relatório em PDF"):
     escolha = st.radio("Escolher tipo:", ["Relatório individual", "Panorama geral"])
-
 
     def gerar_pdf(html):
         buffer = io.BytesIO()
         pisa.CreatePDF(io.StringIO(html), dest=buffer)
         return buffer.getvalue()
-
 
     if escolha == "Relatório individual" and paciente is not None:
         html = f"""
@@ -232,7 +190,6 @@ with st.expander("📄 Exportar relatório em PDF"):
         b64 = base64.b64encode(pdf).decode()
         st.markdown(f'<a href="data:application/pdf;base64,{b64}" download="paciente_{paciente["ID"]}.pdf">📄 Baixar PDF Individual</a>', unsafe_allow_html=True)
 
-
     elif escolha == "Panorama geral":
         html = f"""
         <html><body>
@@ -247,7 +204,6 @@ with st.expander("📄 Exportar relatório em PDF"):
         pdf = gerar_pdf(html)
         b64 = base64.b64encode(pdf).decode()
         st.markdown(f'<a href="data:application/pdf;base64,{b64}" download="relatorio_geral.pdf">🖼️ Baixar PDF Geral</a>', unsafe_allow_html=True)
-
 
 # Exportar painel completo com placeholders (Streamlit Cloud compatível)
 with st.expander("📄 Baixar painel completo (gráficos + tabela) em PDF"):
@@ -279,18 +235,14 @@ with st.expander("📄 Baixar painel completo (gráficos + tabela) em PDF"):
     <body>
         <h2>Painel Completo - CLiNAP</h2>
 
-
         <h3>Gráfico 1: Dispersão</h3>
         <div class="placeholder">[Gráfico exibido interativamente no painel Streamlit]</div>
-
 
         <h3>Gráfico 2: Comparativo</h3>
         <div class="placeholder">[Gráfico exibido interativamente no painel Streamlit]</div>
 
-
         <h3>Gráfico 3: Histograma</h3>
         <div class="placeholder">[Gráfico exibido interativamente no painel Streamlit]</div>
-
 
         <h3>Tabela com Dados Filtrados</h3>
         {tabela_html}
@@ -303,3 +255,56 @@ with st.expander("📄 Baixar painel completo (gráficos + tabela) em PDF"):
         st.markdown(f'<a href="data:application/pdf;base64,{b64_pdf}" download="painel_completo.pdf">📥 Clique aqui para baixar o painel completo em PDF</a>', unsafe_allow_html=True)
     except Exception as e:
         st.error(f"Erro ao gerar o PDF: {e}")
+# Exportações finais
+st.markdown("### 🖼️ Gerar Painel Estático em PDF")
+
+def gerar_html_com_graficos():
+    tabela_html = df_filtrado.to_html(index=False, classes='tabela', border=1)
+    return f"""
+    <html>
+    <head>
+        <meta charset='utf-8'>
+        <style>
+            body {{ font-family: Arial, sans-serif; padding: 20px; }}
+            h2, h3 {{ text-align: center; }}
+            .tabela {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 30px;
+                font-size: 12px;
+            }}
+            .tabela th, .tabela td {{
+                border: 1px solid #000;
+                padding: 4px;
+                text-align: center;
+            }}
+            .tabela th {{
+                background-color: #f2f2f2;
+            }}
+        </style>
+    </head>
+    <body>
+        <h2>Painel Estático - CLiNAP</h2>
+        <h3>Dispersão: IMC vs HbA1c</h3>
+        <p>[Gráfico interativo exibido no painel]</p>
+        <h3>Comparativo: Escore CLiNAP vs CLiNAP-G</h3>
+        <p>[Gráfico interativo exibido no painel]</p>
+        <h3>Distribuição de Pacientes por Cluster</h3>
+        <p>[Gráfico interativo exibido no painel]</p>
+        <h3>Tabela de Dados Filtrados</h3>
+        {tabela_html}
+    </body>
+    </html>
+    """
+
+def converter_html_para_pdf(html_content):
+    result = io.BytesIO()
+    pisa.CreatePDF(io.StringIO(html_content), dest=result, link_callback=lambda uri, rel: uri)
+    return result.getvalue()
+
+if st.button("📄 Baixar Painel Estático em PDF"):
+    html = gerar_html_com_graficos()
+    pdf_bytes = converter_html_para_pdf(html)
+    b64_pdf = base64.b64encode(pdf_bytes).decode()
+    href_pdf = f'<a href="data:application/pdf;base64,{b64_pdf}" download="painel_estatico.pdf">📥 Clique aqui para baixar</a>'
+    st.markdown(href_pdf, unsafe_allow_html=True)

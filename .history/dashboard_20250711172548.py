@@ -9,13 +9,16 @@ from xhtml2pdf import pisa
 import io
 import os
 
-
 st.set_page_config(layout="wide")
 st.markdown("<h2 style='text-align: center;'>📊 Painel Interativo - Clustering Nutricional</h2>", unsafe_allow_html=True)
 
 
+
+
 # Carrega os dados
 df = pd.read_csv("data/base_resultado.csv")
+
+
 
 
 # Aplica CLiNAP-G
