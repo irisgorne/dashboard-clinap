@@ -170,34 +170,21 @@ st.plotly_chart(fig_hist, use_container_width=True)
 
 
 
-# Pesos CLiNAP-G com explicação
-with st.expander("📊 Pesos aprendidos no CLiNAP-G"):
-    st.markdown("Os pesos abaixo mostram **quais variáveis foram mais importantes** para formar os agrupamentos:")
+# Pesos
+with st.expander("📊 Pesos CLiNAP-G"):
     for var, peso in zip(variaveis_g, pesos_g):
-        interpretacao = ""
-        if peso == max(pesos_g):
-            interpretacao = " 👉 variável com **maior influência** na formação dos clusters."
-        elif peso == min(pesos_g):
-            interpretacao = " (menor influência)"
-        st.markdown(f"- **{var}**: `{peso:.4f}`{interpretacao}")
+        st.markdown(f"- **{var}**: `{peso:.4f}`")
 
 
 
 
-
-# Legenda mais clara e interpretativa
+# Legenda
 with st.expander("📚 Legenda explicativa"):
     st.markdown("""
-    🔹 **CLiNAP**: algoritmo de agrupamento que utiliza apenas **IMC e HbA1c** como variáveis,  
-    com **pesos iguais e fixos** (sem considerar quais variáveis são mais relevantes para a distinção dos grupos).
-
-    🔸 **CLiNAP-G**: versão aprimorada que considera **IMC, HbA1c e Calorias**,  
-    aprendendo automaticamente **pesos adaptativos** com base em:
-    - Coesão interna dos clusters (variáveis que mais diferenciam os grupos recebem mais peso);
-    - Um **grafo de similaridade** entre pacientes para penalizar separações artificiais.
-
-    Isso permite formar grupos mais coerentes clinicamente, mesmo que os valores numéricos das variáveis sejam diferentes em escala.
+    **CLiNAP**: IMC e HbA1c com pesos manuais.  
+    **CLiNAP-G**: IMC, HbA1c, Calorias com pesos ajustados automaticamente (grafo + coesão).
     """)
+
 
 
 

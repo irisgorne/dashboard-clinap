@@ -170,17 +170,10 @@ st.plotly_chart(fig_hist, use_container_width=True)
 
 
 
-# Pesos CLiNAP-G com explicação
-with st.expander("📊 Pesos aprendidos no CLiNAP-G"):
-    st.markdown("Os pesos abaixo mostram **quais variáveis foram mais importantes** para formar os agrupamentos:")
+# Pesos
+with st.expander("📊 Pesos CLiNAP-G"):
     for var, peso in zip(variaveis_g, pesos_g):
-        interpretacao = ""
-        if peso == max(pesos_g):
-            interpretacao = " 👉 variável com **maior influência** na formação dos clusters."
-        elif peso == min(pesos_g):
-            interpretacao = " (menor influência)"
-        st.markdown(f"- **{var}**: `{peso:.4f}`{interpretacao}")
-
+        st.markdown(f"- **{var}**: `{peso:.4f}`")
 
 
 
