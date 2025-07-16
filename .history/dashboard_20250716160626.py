@@ -114,7 +114,7 @@ cores_clusters = {
     "0": "green",    # Cluster 0 → verde
     "1": "blue",     # Cluster 1 → azul
     "2": "red",      # Cluster 2 → vermelho
-}
+
 
 
 # Gráfico 1 – Dispersão
