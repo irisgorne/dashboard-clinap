@@ -117,14 +117,13 @@ cores_clusters = {
 }
 
 
+
 # Gráfico 1 – Dispersão
 st.markdown(f"### 🔁 Dispersão: {eixo_x} vs {eixo_y}")
-fig_disp = px.scatter(
-    df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
-    color_discrete_map=cores_clusters,
-    hover_data=["ID", "Sexo", "Idade", "Calorias", "Escore_risco", "Escore_CLiNAP_G"]
-)
+fig_disp = px.scatter(df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
+                      hover_data=["ID", "Sexo", "Idade", "Calorias", "Escore_risco", "Escore_CLiNAP_G"])
 st.plotly_chart(fig_disp, use_container_width=True)
+
 
 
 
@@ -162,22 +161,18 @@ if "ID" in df_filtrado.columns:
 
 # Gráfico 2 – Comparativo
 st.markdown(f"### 📉 Comparativo: {eixo_x} vs {eixo_y}")
-fig_comp = px.scatter(
-    df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
-    trendline="ols", template="plotly",
-    color_discrete_map=cores_clusters
-)
+fig_comp = px.scatter(df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
+                      trendline="ols", template="plotly")
 st.plotly_chart(fig_comp, use_container_width=True)
+
 
 
 
 # Gráfico 3 – Histograma
 st.markdown("### 📊 Pacientes por Cluster")
-fig_hist = px.histogram(
-    df_filtrado, x=cluster_coluna, color=cluster_coluna, text_auto=True,
-    color_discrete_map=cores_clusters
-)
+fig_hist = px.histogram(df_filtrado, x=cluster_coluna, color=cluster_coluna, text_auto=True)
 st.plotly_chart(fig_hist, use_container_width=True)
+
 
 
 

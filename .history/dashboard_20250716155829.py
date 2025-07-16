@@ -181,6 +181,8 @@ st.plotly_chart(fig_hist, use_container_width=True)
 
 
 
+
+
 # Pesos CLiNAP-G com explicação
 with st.expander("📊 Pesos aprendidos no CLiNAP-G"):
     st.markdown("Os pesos abaixo indicam **quais variáveis mais contribuíram** para a formação dos agrupamentos:\n")

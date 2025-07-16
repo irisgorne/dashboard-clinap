@@ -109,22 +109,15 @@ if all(col in df_filtrado.columns for col in ["IMC", "HbA1c"]):
     escore_min = st.sidebar.slider("Mostrar pacientes com escore igual ou maior que:", 0, 100, 0, step=5)
     df_filtrado = df_filtrado[df_filtrado["Escore_risco"] >= escore_min].sort_values("Escore_risco", ascending=False)
 
-# Cores fixas por cluster
-cores_clusters = {
-    "0": "green",    # Cluster 0 → verde
-    "1": "blue",     # Cluster 1 → azul
-    "2": "orange",   # Cluster 2 → laranja
-}
+
 
 
 # Gráfico 1 – Dispersão
 st.markdown(f"### 🔁 Dispersão: {eixo_x} vs {eixo_y}")
-fig_disp = px.scatter(
-    df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
-    color_discrete_map=cores_clusters,
-    hover_data=["ID", "Sexo", "Idade", "Calorias", "Escore_risco", "Escore_CLiNAP_G"]
-)
+fig_disp = px.scatter(df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
+                      hover_data=["ID", "Sexo", "Idade", "Calorias", "Escore_risco", "Escore_CLiNAP_G"])
 st.plotly_chart(fig_disp, use_container_width=True)
+
 
 
 
@@ -162,28 +155,24 @@ if "ID" in df_filtrado.columns:
 
 # Gráfico 2 – Comparativo
 st.markdown(f"### 📉 Comparativo: {eixo_x} vs {eixo_y}")
-fig_comp = px.scatter(
-    df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
-    trendline="ols", template="plotly",
-    color_discrete_map=cores_clusters
-)
+fig_comp = px.scatter(df_filtrado, x=eixo_x, y=eixo_y, color=cluster_coluna,
+                      trendline="ols", template="plotly")
 st.plotly_chart(fig_comp, use_container_width=True)
+
 
 
 
 # Gráfico 3 – Histograma
 st.markdown("### 📊 Pacientes por Cluster")
-fig_hist = px.histogram(
-    df_filtrado, x=cluster_coluna, color=cluster_coluna, text_auto=True,
-    color_discrete_map=cores_clusters
-)
+fig_hist = px.histogram(df_filtrado, x=cluster_coluna, color=cluster_coluna, text_auto=True)
 st.plotly_chart(fig_hist, use_container_width=True)
+
 
 
 
 # Pesos CLiNAP-G com explicação
 with st.expander("📊 Pesos aprendidos no CLiNAP-G"):
-    st.markdown("Os pesos abaixo indicam **quais variáveis mais contribuíram** para a formação dos agrupamentos:\n")
+    st.markdown("Os pesos abaixo mostram **quais variáveis foram mais importantes** para formar os agrupamentos:")
     for var, peso in zip(variaveis_g, pesos_g):
         interpretacao = ""
         if peso == max(pesos_g):
@@ -191,13 +180,6 @@ with st.expander("📊 Pesos aprendidos no CLiNAP-G"):
         elif peso == min(pesos_g):
             interpretacao = " (menor influência)"
         st.markdown(f"- **{var}**: `{peso:.4f}`{interpretacao}")
-
-    st.markdown("""
-    <br>
-    **Importante:** todas as variáveis foram previamente padronizadas (*Z-score*), o que elimina o viés causado por diferenças de escala.  
-    A maior influência de uma variável neste caso indica que ela foi a mais eficaz para separar os grupos — e **não** que possui valores absolutos maiores.
-    """, unsafe_allow_html=True)
-
 
 
 

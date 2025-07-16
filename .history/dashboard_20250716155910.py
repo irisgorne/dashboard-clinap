@@ -178,7 +178,7 @@ fig_hist = px.histogram(
     color_discrete_map=cores_clusters
 )
 st.plotly_chart(fig_hist, use_container_width=True)
-
+python app.py
 
 
 # Pesos CLiNAP-G com explicação
